@@ -6,7 +6,8 @@ import java.util.List;
 public class UserDTO implements Serializable {
     public int userID;
     public String userName;
+    public String password;
     public String ini;
     public String cpr;
-    List<String> roles;
+    public List<String> roles;
 }
