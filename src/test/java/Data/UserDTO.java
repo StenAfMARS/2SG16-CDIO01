@@ -10,4 +10,5 @@ public class UserDTO implements Serializable {
     public String ini;
     public String cpr;
     public List<String> roles;
+
 }
