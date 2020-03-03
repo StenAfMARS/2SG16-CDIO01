@@ -3,37 +3,33 @@ package Visual;
 import consoleColours.ColouredSystemOutPrint;
 
 import java.util.Scanner;
-import java.util.function.Predicate;
 
 public class staticTUI {
+    public static void main(String[] args) {
+        staticTUI s = new staticTUI();
+
+        Menu m =
+            new Menu("main menu", ColouredSystemOutPrint.ANSI_PURPLE,
+                new Process("Create User"),
+                new Process("See Users"),
+                new Menu("Edit User", ColouredSystemOutPrint.ANSI_PURPLE,
+                    new Process("Change Username"),
+                    new Process("Change Initials"),
+                    new Process("Change CPR number"),
+                    new Process("Change password"),
+                    new Process("Change Roles")
+                ),
+                new Process("Delete User")
+            );
+        m.work(s);
+    }
 
     Scanner in = new Scanner(System.in);
-    String textColor = ColouredSystemOutPrint.ANSI_CYAN;
 
-    private void println(String string){
-        StringBuilder sb = new StringBuilder(string.length() + 20);
-
-        sb.append(textColor);
-        sb.append(string);
-        sb.append(ColouredSystemOutPrint.ANSI_RESET);
-
-        System.out.println(sb.toString());
+    public void println(String string){
+        System.out.println(string);
     }
-
-    public String getUserString(String text){
-        println(text);
+    public String getLine(){
         return in.nextLine();
     }
-    public String getUserString(String text, Predicate<String> criteria){
-        println(text);
-        String userString = in.nextLine();
-        while (criteria.test(userString)){
-            println("Please enter a valid string. Type \\C to return");
-            userString = in.nextLine();
-        }
-        return userString;
-    }
-
-
-
 }
