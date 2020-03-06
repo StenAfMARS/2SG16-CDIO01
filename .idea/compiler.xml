@@ -11,7 +11,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="2SG16-CDIO01" target="7" />
+      <module name="2SG16-CDIO01" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>
