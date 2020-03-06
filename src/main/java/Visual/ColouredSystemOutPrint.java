@@ -1,4 +1,4 @@
-package consoleColours;
+package Visual;
 
 public class ColouredSystemOutPrint {
 

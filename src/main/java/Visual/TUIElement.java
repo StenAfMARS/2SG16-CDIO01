@@ -7,9 +7,10 @@ public abstract class TUIElement {
         this.name = name;
     }
 
-    public abstract boolean workOnce(staticTUI tui);
-    public void work(staticTUI tui){
+    protected abstract boolean run();
+
+    public void work(){
         //noinspection StatementWithEmptyBody
-        while(workOnce(tui)){}
+        while(run()){}
     }
 }
