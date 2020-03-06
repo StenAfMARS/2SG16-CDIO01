@@ -3,11 +3,11 @@ import com.sun.xml.internal.bind.v2.model.core.ID;
 import java.sql.*;
 
 public class myDbController {
-    public static String dburl = "jdbc:mysql://localhost:3306/mydb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    public static String dbusername = "root";
-    public static String dbpassword = "1234";
+    public static String dburl = "jdbc:mysql://mysql59.unoeuro.com:3306/vampire_live_dk_db_g16cdio1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    public static String dbusername = "vampire_live_dk";
+    public static String dbpassword = "b2h4k9gc";
     public static void main(String[] args){
-         DEverything("Users","userId",5);
+         DEverything("Users","userId",1);
         SprintUserList();
         SprintRollList();
     }
@@ -20,7 +20,7 @@ public class myDbController {
 
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
             Statement stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM mydb.users LEFT JOIN  mydb.rolls ON mydb.users.rollID = mydb.rolls.rollID");
+            ResultSet rs=stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollsID");
             while(rs.next())
                 System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3)+rs.getString(4)+"  "+rs.getInt(5)+"  "+rs.getString(6)+"  ");
             connection.close();
@@ -36,7 +36,7 @@ public class myDbController {
 
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
             Statement stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery("SELECT * FROM Rolls");
+            ResultSet rs=stmt.executeQuery("SELECT * FROM vampire_live_dk_db_g16cdio1.Rolls");
             while(rs.next())
                 System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  ");
             connection.close();
@@ -55,7 +55,7 @@ public class myDbController {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
-            String query = " insert into users (userName, userPassword, ini, cpr, rollID)"
+            String query = " insert into users (userName, userPassword, ini, cpr, fk_rollID)"
                     + " values (?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
@@ -82,7 +82,7 @@ public class myDbController {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
-            String query = " insert into rolls (rollName, accessLVL)"
+            String query = " insert into vampire_live_dk_db_g16cdio1.rolls (rollName, accessLVL)"
                     + " values (?, ?)";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
@@ -107,7 +107,7 @@ public class myDbController {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
-            String query = "update users set userName = ?, userPassword = ?,ini = ?, cpr = ?, rollId = ? where userId = ?";
+            String query = "update vampire_live_dk_db_g16cdio1.users set userName = ?, userPassword = ?,ini = ?, cpr = ?, fk_rollId = ? where userId = ?";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, userName);
@@ -134,7 +134,7 @@ public class myDbController {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
-            String query = "update rolls set rollName = ?, accessLVL = ? where rollID = ?";
+            String query = "update vampire_live_dk_db_g16cdio1.rolls set rollName = ?, accessLVL = ? where rollID = ?";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, rollName);
@@ -158,7 +158,7 @@ public class myDbController {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
-            String query = "delete from "+tableName+" where "+tableRowName+" = ?";
+            String query = "delete from vampire_live_dk_db_g16cdio1."+tableName+" where "+tableRowName+" = ?";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setInt(1, IDOfItem);
