@@ -17,51 +17,87 @@ public class staticTUI {
             new Process("Opret Bruger", () -> {
                 UserDTO user = new UserDTO();
 
-                staticTUI.print("username: ");
-                user.userName = staticTUI.getLine();
+                do {staticTUI.print("username: ");}
+                while (!user.setUserName(staticTUI.getLine()));
 
-                staticTUI.print("initials: ");
-                user.ini = staticTUI.getLine();
+                do {staticTUI.print("initials: ");}
+                while (!user.setIni(staticTUI.getLine()));
 
-                staticTUI.print("cpr: ");
-                user.cpr = staticTUI.getLine();
+                do {staticTUI.print("cpr: ");}
+                while (!user.setCpr(staticTUI.getLine()));
 
                 staticTUI.print("roles: ");
-                user.roles = Arrays.asList(staticTUI.getLine().split(" "));
+                user.setRoles(Arrays.asList(staticTUI.getLine().split(" ")));
 
                 users.createUser(user);
             }),
             new Process("Vis Brugere", () -> {
                 for (UserDTO user : users.getUserList()){
-                    staticTUI.println(user.userID + " " + user.userName);
+                    staticTUI.println(user.getUserID() + " - " + user.getUserName());
                 }
             }),
-            new Process("Opdater Bruger", () -> {
-                UserDTO user = new UserDTO();
-                staticTUI.print("userID: ");
-                user.userID = Integer.parseInt(staticTUI.getLine());
+            new Process("Vis Bruger", () -> {
+                UserDTO user;
+
+                while (true){
+                    staticTUI.print("userID: ");
+                    try {
+                        user = users.getUser(Integer.parseInt(staticTUI.getLine()));
+                        break;
+                    } catch (Exception e) {}
+                }
 
                 staticTUI.print("username: ");
-                user.userName = staticTUI.getLine();
+                staticTUI.println( user.getUserName() );
 
                 staticTUI.print("password: ");
-                user.password = staticTUI.getLine();
+                staticTUI.println( user.getPassword() );
 
-                staticTUI.print("initials: ");
-                user.ini = staticTUI.getLine();
+                staticTUI.print("ini: ");
+                staticTUI.println( user.getIni());
 
                 staticTUI.print("cpr: ");
-                user.cpr = staticTUI.getLine();
+                staticTUI.println( user.getCpr());
 
                 staticTUI.print("roles: ");
-                user.roles = Arrays.asList(staticTUI.getLine().split(" "));
+                staticTUI.println( user.getRoles().toString() );
+            }),
+            new Process("Opdater Bruger", () -> {
+                UserDTO user;
+
+                while (true){
+                    staticTUI.print("userID: ");
+                    try {
+                        user = users.getUser(Integer.parseInt(staticTUI.getLine()));
+                        break;
+                    } catch (Exception e) {}
+                }
+
+                do {staticTUI.print("new username: ");}
+                while (!user.setUserName(staticTUI.getLine()));
+
+                do {staticTUI.print("new password: ");}
+                while (!user.setPassword(staticTUI.getLine()));
+
+                do {staticTUI.print("new ini: ");}
+                while (!user.setIni(staticTUI.getLine()));
+
+                do {staticTUI.print("new cpr: ");}
+                while (!user.setCpr(staticTUI.getLine()));
+
+                staticTUI.print("new roles: ");
+                user.setRoles(Arrays.asList(staticTUI.getLine().split(" ")));
 
                 users.updateUser(user);
             }),
             new Process("Slet Bruger", () -> {
-                staticTUI.print("brugerID: ");
-                try {users.deleteUser(Integer.parseInt(staticTUI.getLine()));}
-                catch (Exception e) {}
+                while (true){
+                    staticTUI.print("userID: ");
+                    try {
+                        users.deleteUser(Integer.parseInt(staticTUI.getLine()));
+                        break;
+                    } catch (Exception e) {}
+                }
             })
         ).work();
     }

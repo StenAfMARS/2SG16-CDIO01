@@ -12,7 +12,7 @@ public class SaveInList implements IUserDAO {
     @java.lang.Override
     public UserDTO getUser(int userId) throws DALException {
         for (UserDTO bruger: brugere) {
-            if (userId == bruger.userID){
+            if (userId == bruger.getUserID()){
                 return bruger;
             }
         }
@@ -31,21 +31,22 @@ public class SaveInList implements IUserDAO {
 
     @java.lang.Override
     public void updateUser(UserDTO user) throws DALException {
+        int i = 0;
+
         for ( UserDTO bruger: brugere) {
-            if (bruger.userID == user.userID) {
-                bruger.userName = user.userName;
-                bruger.password = user.password;
-                bruger.cpr = user.cpr;
-                bruger.ini = user.ini;
-                bruger.roles = user.roles;
+            if (bruger.getUserID() == user.getUserID()) {
+                brugere.remove(i);
+                brugere.add(i, user);
+                break;
             }
+            i++;
         }
     }
 
     @java.lang.Override
     public void deleteUser(int userId) throws DALException {
         for (UserDTO bruger: brugere) {
-            if (userId == bruger.userID){
+            if (userId == bruger.getUserID()){
                 brugere.remove(bruger);
                 break;
             }
