@@ -10,9 +10,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SaveInDatabase implements IUserDAO {
-    private static final String dburl = "jdbc:mysql://mysql59.unoeuro.com:3306/vampire_live_dk_db_g16cdio1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    private static final String dbusername = "vampire_live_dk";
-    private static final String dbpassword = "b2h4k9gc";
+    public static String dburl = "jdbc:mysql://mysql59.unoeuro.com:3306/vampire_live_dk_db_g16cdio1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    public static String dbusername = "vampire_live_dk";
+    public static String dbpassword = "b2h4k9gc";
 
     @Override
     public UserDTO getUser(int userID){
@@ -21,7 +21,7 @@ public class SaveInDatabase implements IUserDAO {
 
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
             Statement stmt=connection.createStatement();
-            ResultSet rs= stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollsID where userID == " + userID);
+            ResultSet rs= stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollID where userID == " + userID);
 
             while(rs.next()) {
                 userDTO.setUserID(rs.getInt(1));
@@ -47,8 +47,7 @@ public class SaveInDatabase implements IUserDAO {
 
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
             Statement stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollsID");
-
+            ResultSet rs=stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollID");
             while(rs.next()) {
                 UserDTO userDTO = new UserDTO();
                 userDTO.setUserID(rs.getInt(1));
