@@ -1,5 +1,8 @@
 package Visual;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Menu extends TUIElement {
     private List<TUIElement> TUIElements;
     private String color;
