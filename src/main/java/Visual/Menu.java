@@ -53,7 +53,7 @@ public class Menu extends TUIElement {
             if (i == 0)
                 return false;
             else
-                TUIElements.get(i).work();
+                TUIElements.get(i - 1).work();
         }
         catch (Exception ignored){}
 

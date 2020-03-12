@@ -1,34 +1,73 @@
-import com.sun.xml.internal.bind.v2.model.core.ID;
+package Function;
+
+import Data.UserDTO;
+import Exceptions.DALException;
+import Function.IUserDAO;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class myDbController {
-    public static String dburl = "jdbc:mysql://mysql59.unoeuro.com:3306/vampire_live_dk_db_g16cdio1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-    public static String dbusername = "vampire_live_dk";
-    public static String dbpassword = "b2h4k9gc";
-    public static void main(String[] args){
-         DEverything("Users","userId",1);
-        SprintUserList();
-        SprintRollList();
-    }
+public class SaveInDatabase implements IUserDAO {
+    private static final String dburl = "jdbc:mysql://mysql59.unoeuro.com:3306/vampire_live_dk_db_g16cdio1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+    private static final String dbusername = "vampire_live_dk";
+    private static final String dbpassword = "b2h4k9gc";
 
+    @Override
+    public UserDTO getUser(int userID){
 
-    // S + something = select somthing
-    public static void SprintUserList(){
-
-        System.out.println("Connecting database...");
+        UserDTO userDTO = new UserDTO();
 
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
             Statement stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollsID");
-            while(rs.next())
-                System.out.println(rs.getInt(1)+"  "+rs.getString(2)+"  "+rs.getString(3)+rs.getString(4)+"  "+rs.getInt(5)+"  "+rs.getString(6)+"  ");
+            ResultSet rs= stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollsID where userID == " + userID);
+
+            while(rs.next()) {
+                userDTO.setUserID(rs.getInt(1));
+                userDTO.setUserName(rs.getString(2));
+                userDTO.setPassword(rs.getString(3));
+                userDTO.setIni(rs.getString(4));
+                userDTO.setCpr(rs.getString(5));
+                userDTO.setRoles(Arrays.asList(rs.getString(6)));
+            }
+
             connection.close();
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect the database!", e);
         }
 
+        return userDTO;
     }
+
+    // S + something = select somthing
+    @Override
+    public List<UserDTO> getUserList(){
+        List<UserDTO> userDTOs = new ArrayList<>();
+
+        try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
+            Statement stmt=connection.createStatement();
+            ResultSet rs=stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollsID");
+
+            while(rs.next()) {
+                UserDTO userDTO = new UserDTO();
+                userDTO.setUserID(rs.getInt(1));
+                userDTO.setUserName(rs.getString(2));
+                userDTO.setPassword(rs.getString(3));
+                userDTO.setIni(rs.getString(4));
+                userDTO.setCpr(rs.getString(5));
+                userDTO.setRoles(Arrays.asList(rs.getString(6)));
+                userDTOs.add(userDTO);
+            }
+
+            connection.close();
+        } catch (SQLException e) {
+            throw new IllegalStateException("Cannot connect the database!", e);
+        }
+
+        return userDTOs;
+    }
+
     // S + something = select somthing
     public static void SprintRollList(){
 
@@ -45,10 +84,10 @@ public class myDbController {
         }
 
     }
+
     // C + something = Create something
-    public static void CUsers(String userName, String userPassword, String ini, int cpr, int rollID ){
-
-
+    @Override
+    public void createUser(UserDTO userDTO){
         System.out.println("Connecting database...");
 
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
@@ -59,11 +98,11 @@ public class myDbController {
                     + " values (?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
-            preparedStmt.setString(1, userName);
-            preparedStmt.setString(2, userPassword);
-            preparedStmt.setString(3, ini);
-            preparedStmt.setInt(4, cpr);
-            preparedStmt.setInt(5, rollID);
+            preparedStmt.setString(1, userDTO.getUserName());
+            preparedStmt.setString(2, userDTO.getPassword());
+            preparedStmt.setString(3, userDTO.getIni());
+            preparedStmt.setString(4, userDTO.getCpr());
+            preparedStmt.setInt(5, 0);//userDTO.);
 
             // execute the preparedstatement
             preparedStmt.execute();
@@ -98,9 +137,9 @@ public class myDbController {
         }
     }
     // U + something = Update something
-    public static void UUsers(int userId, String userName, String userPassword, String ini, int cpr, int rollID ){
 
-
+    @Override
+    public void updateUser(UserDTO userDTO){
         System.out.println("Connecting database...");
 
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
@@ -110,12 +149,12 @@ public class myDbController {
             String query = "update vampire_live_dk_db_g16cdio1.users set userName = ?, userPassword = ?,ini = ?, cpr = ?, fk_rollId = ? where userId = ?";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
-            preparedStmt.setString(1, userName);
-            preparedStmt.setString(2, userPassword);
-            preparedStmt.setString(3, ini);
-            preparedStmt.setInt(4, cpr);
-            preparedStmt.setInt(5, rollID);
-            preparedStmt.setInt(6, userId);
+            preparedStmt.setString(1, userDTO.getUserName());
+            preparedStmt.setString(2, userDTO.getPassword());
+            preparedStmt.setString(3, userDTO.getIni());
+            preparedStmt.setString(4, userDTO.getCpr());
+            preparedStmt.setInt(5, 0); // userDTO.getRoles());
+            preparedStmt.setInt(6, userDTO.getUserID());
 
             // execute the preparedstatement
             preparedStmt.execute();
@@ -125,6 +164,12 @@ public class myDbController {
             throw new IllegalStateException("Cannot connect the database!", e);
         }
     }
+
+    @Override
+    public void deleteUser(int userId) throws DALException {
+        DEverything("users", "userID", userId);
+    }
+
     public static void Uroll(int rollID, String rollName, int accessLVL ){
 
 
@@ -150,6 +195,8 @@ public class myDbController {
         }
     }
     // D + something = Delete something
+
+
     public static void DEverything(String tableName, String tableRowName, int IDOfItem ){
 
         System.out.println("Connecting database...");
