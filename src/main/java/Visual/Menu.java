@@ -1,18 +1,29 @@
 package Visual;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Menu extends TUIElement {
-    private TUIElement[] TUIElements;
+    private List<TUIElement> TUIElements;
     private String color;
 
     public Menu(String name, TUIElement... TUIElements){
         super(name);
-        this.TUIElements = TUIElements;
+        this.TUIElements = Arrays.asList(TUIElements);
         this.color = null;
     }
     public Menu(String name, String color, TUIElement... TUIElements){
         super(name);
-        this.TUIElements = TUIElements;
+        this.TUIElements = Arrays.asList(TUIElements);
         this.color = color;
+    }
+
+    public void AddMenuPoint(TUIElement tuiElement){
+        TUIElements.add(tuiElement);
+    }
+
+    public boolean RemoveMenuPoint(TUIElement tuiElement){
+        return TUIElements.remove(tuiElement);
     }
 
     @Override
@@ -22,10 +33,11 @@ public class Menu extends TUIElement {
         if (color != null)
             sb.append(color);
 
-        for (int i = 0; i < TUIElements.length; i++) {
-            sb.append(i + 1);
+        int i = 0;
+        for (TUIElement tuiElement : TUIElements) {
+            sb.append(++i);
             sb.append(" - ");
-            sb.append(TUIElements[i].name);
+            sb.append(tuiElement.name);
             sb.append("\n");
         }
 
@@ -36,12 +48,12 @@ public class Menu extends TUIElement {
         staticTUI.println(sb.toString());
 
         try {
-            int i = Integer.parseInt(staticTUI.getLine());
+            i = Integer.parseInt(staticTUI.getLine());
 
             if (i == 0)
                 return false;
             else
-                TUIElements[i - 1].work();
+                TUIElements.get(i).work();
         }
         catch (Exception ignored){}
 
