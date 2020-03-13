@@ -18,11 +18,13 @@ public class SaveInDatabase implements IUserDAO {
     public UserDTO getUser(int userID){
 
         UserDTO userDTO = new UserDTO();
-
+        System.out.println("Connecting database...");
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
+            System.out.println("Connected database...");
             Statement stmt=connection.createStatement();
-            ResultSet rs= stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollID where userID == " + userID);
-
+            System.out.println("execute command");
+            ResultSet rs= stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users  LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollID WHERE userID = "+userID+"");
+            System.out.println("executed command");
             while(rs.next()) {
                 userDTO.setUserID(rs.getInt(1));
                 userDTO.setUserName(rs.getString(2));
@@ -93,7 +95,8 @@ public class SaveInDatabase implements IUserDAO {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
-            String query = " insert into users (userName, userPassword, ini, cpr, fk_rollID)"
+            System.out.println("connection estapleshed");
+            String query = " insert into Users (userName, userPassword, ini, cpr, fk_rollID)"
                     + " values (?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
@@ -107,6 +110,7 @@ public class SaveInDatabase implements IUserDAO {
             preparedStmt.execute();
 
             connection.close();
+            System.out.println("Bruger oprettet connection closed");
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect the database!", e);
         }
@@ -120,7 +124,7 @@ public class SaveInDatabase implements IUserDAO {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
-            String query = " insert into vampire_live_dk_db_g16cdio1.rolls (rollName, accessLVL)"
+            String query = " insert into vampire_live_dk_db_g16cdio1.Rolls (rollName, accessLVL)"
                     + " values (?, ?)";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
@@ -145,7 +149,7 @@ public class SaveInDatabase implements IUserDAO {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
-            String query = "update vampire_live_dk_db_g16cdio1.users set userName = ?, userPassword = ?,ini = ?, cpr = ?, fk_rollId = ? where userId = ?";
+            String query = "update vampire_live_dk_db_g16cdio1.Users set userName = ?, userPassword = ?,ini = ?, cpr = ?, fk_rollId = ? where userId = ?";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, userDTO.getUserName());
@@ -166,7 +170,7 @@ public class SaveInDatabase implements IUserDAO {
 
     @Override
     public void deleteUser(int userId) throws DALException {
-        DEverything("users", "userID", userId);
+        DEverything("Users", "userID", userId);
     }
 
     public static void Uroll(int rollID, String rollName, int accessLVL ){
@@ -178,7 +182,7 @@ public class SaveInDatabase implements IUserDAO {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
-            String query = "update vampire_live_dk_db_g16cdio1.rolls set rollName = ?, accessLVL = ? where rollID = ?";
+            String query = "update vampire_live_dk_db_g16cdio1.Rolls set rollName = ?, accessLVL = ? where rollID = ?";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, rollName);
@@ -204,13 +208,15 @@ public class SaveInDatabase implements IUserDAO {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
+            System.out.println("connection estapleshed");
             String query = "delete from vampire_live_dk_db_g16cdio1."+tableName+" where "+tableRowName+" = ?";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setInt(1, IDOfItem);
             // execute the preparedstatement
+            System.out.println("connection running sql command");
             preparedStmt.execute();
-
+            System.out.println("connection sql command executed");
             connection.close();
         } catch (SQLException e) {
             throw new IllegalStateException("Cannot connect the database!", e);
