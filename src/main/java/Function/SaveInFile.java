@@ -34,7 +34,7 @@ public class SaveInFile extends SaveInList{
 
     @Override
     public void createUser(UserDTO user) throws DALException, IOException {
-        //super.createUser(user);
+        super.createUser(user);
 
         jObj.put("Name", user.getUserName());
         jObj.put("Password", user.getPassword());
@@ -64,7 +64,7 @@ public class SaveInFile extends SaveInList{
         Path currentDir = Paths.get(".");
 
         try {
-            file = new FileWriter(  currentDir.toAbsolutePath() + "\\Users\\" + user.getUserName() +".txt");
+            file = new FileWriter(  currentDir.toAbsolutePath() + "\\Users\\" + user.getUserName() +".json");
             file.write(obj.toJSONString());
         } catch (JsonWriteException e){
 
