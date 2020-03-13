@@ -47,15 +47,17 @@ public class Menu extends TUIElement {
 
         staticTUI.println(sb.toString());
 
+        i = 0;
+
         try {
             i = Integer.parseInt(staticTUI.getLine());
-
-            if (i == 0)
-                return false;
-            else
-                TUIElements.get(i).work();
         }
         catch (Exception ignored){}
+
+        if (i == 0)
+            return false;
+        else
+            TUIElements.get(i - 1).work();
 
         return true;
     }
