@@ -9,6 +9,7 @@ import java.util.List;
 
 public class SaveInList implements IUserDAO {
     protected List<UserDTO> brugere = new ArrayList<>();
+    protected int i = 0;
 
     @java.lang.Override
     public UserDTO getUser(int userId) throws DALException {
@@ -27,6 +28,7 @@ public class SaveInList implements IUserDAO {
 
     @java.lang.Override
     public void createUser(UserDTO user) throws DALException, IOException {
+        user.setUserID(i++);
         brugere.add(user);
     }
 
