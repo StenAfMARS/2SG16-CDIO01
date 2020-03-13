@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SaveInList implements IUserDAO {
-    List<UserDTO> brugere = new ArrayList<>();
+    protected List<UserDTO> brugere = new ArrayList<>();
 
     @java.lang.Override
     public UserDTO getUser(int userId) throws DALException {

@@ -2,7 +2,6 @@ package view;
 
 import Data.UserDTO;
 import Function.IUserDAO;
-import Function.SaveInList;
 import Visual.*;
 import Visual.Process;
 
@@ -18,6 +17,8 @@ public class TUI {
         main = new Menu("mainMenu", ColouredSystemOutPrint.ANSI_PURPLE,
                 new Process("Opret Bruger", () -> {
                     UserDTO user = new UserDTO();
+
+                    user.randomizePassword();
 
                     do {
                         staticTUI.print("username: ");}
