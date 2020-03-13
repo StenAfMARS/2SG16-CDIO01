@@ -23,7 +23,7 @@ public class SaveInDatabase implements IUserDAO {
             System.out.println("Connected database...");
             Statement stmt=connection.createStatement();
             System.out.println("execute command");
-            ResultSet rs= stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users  LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollID WHERE userID = "+userID+"");
+            ResultSet rs= stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,Rolls FROM Users WHERE userID = "+userID+"");
             System.out.println("executed command");
             while(rs.next()) {
                 userDTO.setUserID(rs.getInt(1));
@@ -49,7 +49,7 @@ public class SaveInDatabase implements IUserDAO {
 
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
             Statement stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,rollName FROM Users LEFT JOIN  Rolls ON Rolls.rollID = Users.fk_rollID");
+            ResultSet rs=stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,Rolls FROM Users");
             while(rs.next()) {
                 UserDTO userDTO = new UserDTO();
                 userDTO.setUserID(rs.getInt(1));
@@ -96,7 +96,7 @@ public class SaveInDatabase implements IUserDAO {
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
             System.out.println("connection estapleshed");
-            String query = " insert into Users (userName, userPassword, ini, cpr, fk_rollID)"
+            String query = " insert into Users (userName, userPassword, ini, cpr, Rolls)"
                     + " values (?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
@@ -149,14 +149,14 @@ public class SaveInDatabase implements IUserDAO {
             // create the mysql delete statement.
             // i'm deleting the row where the id is "3", which corresponds to my
             // "Barney Rubble" record.
-            String query = "update vampire_live_dk_db_g16cdio1.Users set userName = ?, userPassword = ?,ini = ?, cpr = ?, fk_rollId = ? where userId = ?";
+            String query = "update vampire_live_dk_db_g16cdio1.Users set userName = ?, userPassword = ?,ini = ?, cpr = ?, Rolls = ? where userId = ?";
 
             PreparedStatement preparedStmt = connection.prepareStatement(query);
             preparedStmt.setString(1, userDTO.getUserName());
             preparedStmt.setString(2, userDTO.getPassword());
             preparedStmt.setString(3, userDTO.getIni());
             preparedStmt.setString(4, userDTO.getCpr());
-            preparedStmt.setInt(5, 0); // userDTO.getRoles());
+            preparedStmt.setString(5, ""); // userDTO.getRoles());
             preparedStmt.setInt(6, userDTO.getUserID());
 
             // execute the preparedstatement
