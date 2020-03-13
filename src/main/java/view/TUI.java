@@ -2,10 +2,10 @@ package view;
 
 import Data.UserDTO;
 import Function.IUserDAO;
-import Function.SaveInList;
 import Visual.*;
 import Visual.Process;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 public class TUI {
@@ -18,6 +18,8 @@ public class TUI {
         main = new Menu("mainMenu", ColouredSystemOutPrint.ANSI_PURPLE,
                 new Process("Opret Bruger", () -> {
                     UserDTO user = new UserDTO();
+
+                    user.randomizePassword();
 
                     do {
                         staticTUI.print("username: ");}
@@ -32,7 +34,11 @@ public class TUI {
                     staticTUI.print("roles: ");
                     user.setRoles(Arrays.asList(staticTUI.getLine().split(" ")));
 
-                    userDAO.createUser(user);
+                    try {
+                        userDAO.createUser(user);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }),
                 new Process("Vis Brugere", () -> {
                     for (UserDTO user : userDAO.getUserList()){

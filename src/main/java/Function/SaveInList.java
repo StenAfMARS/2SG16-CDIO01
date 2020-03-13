@@ -3,11 +3,12 @@ package Function;
 import Data.UserDTO;
 import Exceptions.DALException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SaveInList implements IUserDAO {
-    List<UserDTO> brugere = new ArrayList<>();
+    protected List<UserDTO> brugere = new ArrayList<>();
 
     @java.lang.Override
     public UserDTO getUser(int userId) throws DALException {
@@ -25,7 +26,7 @@ public class SaveInList implements IUserDAO {
     }
 
     @java.lang.Override
-    public void createUser(UserDTO user) throws DALException {
+    public void createUser(UserDTO user) throws DALException, IOException {
         brugere.add(user);
     }
 

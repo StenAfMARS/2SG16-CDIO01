@@ -1,7 +1,9 @@
 package Data;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class UserDTO implements Serializable {
     private static final String userNameMatch = "^.{2,20}$";
@@ -9,12 +11,27 @@ public class UserDTO implements Serializable {
     private static final String iniMatch = "^[A-Za-z]{2,4}$";
     private static final String cprMatch = "^[0-9]{6}-[0-9]{4}$";
 
-    private int userID;
-    private String userName;
-    private String password;
-    private String ini;
-    private String cpr;
-    private List<String> roles;
+    private int userID = -1;
+    private String userName = "";
+    private String password = "";
+    private String ini = "";
+    private String cpr = "";
+    private List<String> roles = new ArrayList<>();
+
+    public void randomizePassword(){
+        while (!setPassword(generatePassword(8))) {}
+    }
+    private String generatePassword(int passwordLength){
+        Random random = new Random();
+
+        StringBuilder sb = new StringBuilder(passwordLength);
+
+        for (int i = 0; i < passwordLength; i++) {
+            sb.append((char)(random.nextInt(('~' - '!') + 1) + '!'));
+        }
+
+        return sb.toString();
+    }
 
     public int getUserID() {
         return userID;

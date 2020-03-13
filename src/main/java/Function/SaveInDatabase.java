@@ -8,6 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class SaveInDatabase implements IUserDAO {
     public static String dburl = "jdbc:mysql://mysql59.unoeuro.com:3306/vampire_live_dk_db_g16cdio1?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
@@ -31,7 +32,7 @@ public class SaveInDatabase implements IUserDAO {
                 userDTO.setPassword(rs.getString(3));
                 userDTO.setIni(rs.getString(4));
                 userDTO.setCpr(rs.getString(5));
-                userDTO.setRoles(Arrays.asList(rs.getString(6)));
+                userDTO.setRoles(Arrays.asList(rs.getString(6).split(" ")));
             }
 
             connection.close();
@@ -57,7 +58,7 @@ public class SaveInDatabase implements IUserDAO {
                 userDTO.setPassword(rs.getString(3));
                 userDTO.setIni(rs.getString(4));
                 userDTO.setCpr(rs.getString(5));
-                userDTO.setRoles(Arrays.asList(rs.getString(6)));
+                userDTO.setRoles(Arrays.asList(rs.getString(6).split(" ")));
                 userDTOs.add(userDTO);
             }
 
@@ -71,7 +72,6 @@ public class SaveInDatabase implements IUserDAO {
 
     // S + something = select somthing
     public static void SprintRollList(){
-
         System.out.println("Connecting database...");
 
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
@@ -104,7 +104,11 @@ public class SaveInDatabase implements IUserDAO {
             preparedStmt.setString(2, userDTO.getPassword());
             preparedStmt.setString(3, userDTO.getIni());
             preparedStmt.setString(4, userDTO.getCpr());
-            preparedStmt.setInt(5, 0);//userDTO.);
+
+            StringJoiner joiner = new StringJoiner(" ","","");
+            userDTO.getRoles().forEach(joiner::add);
+
+            preparedStmt.setString(5, joiner.toString());
 
             // execute the preparedstatement
             preparedStmt.execute();
@@ -156,7 +160,12 @@ public class SaveInDatabase implements IUserDAO {
             preparedStmt.setString(2, userDTO.getPassword());
             preparedStmt.setString(3, userDTO.getIni());
             preparedStmt.setString(4, userDTO.getCpr());
-            preparedStmt.setString(5, ""); // userDTO.getRoles());
+
+            StringJoiner joiner = new StringJoiner(" ","","");
+            userDTO.getRoles().forEach(joiner::add);
+
+            preparedStmt.setString(5, joiner.toString());
+
             preparedStmt.setInt(6, userDTO.getUserID());
 
             // execute the preparedstatement
