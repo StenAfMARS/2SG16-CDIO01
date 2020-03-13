@@ -21,7 +21,6 @@ public class SaveInFile extends SaveInList{
     JSONArray jArray = new JSONArray();
     private static FileWriter file;
 
-
     @Override
     public UserDTO getUser(int userId) throws DALException {
         return super.getUser(userId);
@@ -34,7 +33,7 @@ public class SaveInFile extends SaveInList{
 
     @Override
     public void createUser(UserDTO user) throws DALException, IOException {
-        //super.createUser(user);
+        super.createUser(user);
 
         jObj.put("Name", user.getUserName());
         jObj.put("Password", user.getPassword());
@@ -47,7 +46,6 @@ public class SaveInFile extends SaveInList{
         jObj.put("Roles", jArray);
 
         writeDataToFile(user, jObj);
-
     }
 
     @Override
