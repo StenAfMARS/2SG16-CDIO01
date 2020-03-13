@@ -49,7 +49,7 @@ public class SaveInDatabase implements IUserDAO {
 
         try (Connection connection = DriverManager.getConnection(dburl, dbusername, dbpassword)) {
             Statement stmt=connection.createStatement();
-            ResultSet rs=stmt.executeQuery("SELECT userID,userName,userPassword,ini,cpr,Rolls FROM Users");
+            ResultSet rs=stmt.executeQuery("SELECT * FROM Users");
             while(rs.next()) {
                 UserDTO userDTO = new UserDTO();
                 userDTO.setUserID(rs.getInt(1));
