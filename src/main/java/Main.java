@@ -5,6 +5,7 @@ import view.TUI;
 
 public class Main {
     public static void main(String[] args) {
-        new TUI(new SaveInDatabase()).work();
+        //new TUI(new SaveInDatabase()).work();
+        new TUI(new SaveInFile()).work();
     }
 }
