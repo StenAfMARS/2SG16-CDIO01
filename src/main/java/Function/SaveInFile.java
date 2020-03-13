@@ -6,19 +6,20 @@ import Exceptions.DALException;
 import Exceptions.JsonWriteException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SaveInFile extends SaveInList{
     JSONObject jObj = new JSONObject();
     JSONArray jArray = new JSONArray();
+    JSONParser parser = new JSONParser();
     private static FileWriter file;
 
 
@@ -34,8 +35,8 @@ public class SaveInFile extends SaveInList{
 
     @Override
     public void createUser(UserDTO user) throws DALException, IOException {
-        //super.createUser(user);
-
+        super.createUser(user);
+        jObj.put("ID", user.getUserID());
         jObj.put("Name", user.getUserName());
         jObj.put("Password", user.getPassword());
         jObj.put("Ini", user.getIni());
@@ -64,7 +65,7 @@ public class SaveInFile extends SaveInList{
         Path currentDir = Paths.get(".");
 
         try {
-            file = new FileWriter(  currentDir.toAbsolutePath() + "\\Users\\" + user.getUserName() +".txt");
+            file = new FileWriter(  currentDir.toAbsolutePath() + "\\Users\\" + user.getUserID() +".json");
             file.write(obj.toJSONString());
         } catch (JsonWriteException e){
 
